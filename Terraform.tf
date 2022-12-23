@@ -68,4 +68,15 @@ resource "aws_subnet" "db-subnet-private-vpc-custom" {
   }
 }
 
+resource "aws_subnet" "app-subnet-public-vpc-custom" {
+  vpc_id = aws_vpc.vpc-custom.id
+  cidr_block = "10.0.1.0/24"
+  # cidr_block = var.subnet-public-prod-cidr # => will ask you (prompt) to enter the valye for this variable whenever you apply
+  availability_zone = "us-east-1a" # if don't hard coded AWS will assign a random AZ
+  tags = {
+      Name = "app-subnet-public-vpc-custom"
+      Stack = "production"      
+    }
+}
+
 
