@@ -15,3 +15,10 @@ provider "aws" {
   access_key = "AKIAUQSOWV2UJMW4NVXR"
   secret_key = "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"
 }
+resource "aws_vpc" "vpc-custom" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "vpc-custom"
+    Stack = "production"
+  }
+}
