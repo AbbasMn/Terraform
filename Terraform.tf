@@ -104,3 +104,47 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
     route_table_id = aws_route_table.routeTable-vpc-custom.id
   }
 
+ resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom" {
+  name        = "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom"
+  description = "Allow web & SSH inbound traffic"
+  vpc_id      = aws_vpc.vpc-custom.id
+
+  ingress {
+    description      = "HTTPS web trafic from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    # ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  }
+
+  ingress {
+    description      = "HTTP web trafic from VPC"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    # ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  }
+
+  ingress {
+    description      = "SSH trafic from VPC"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    # ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"  # any protocol
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  tags = {
+    Name = "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom"
+    Stack = "production"      
+  }
+}
