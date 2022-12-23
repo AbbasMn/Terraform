@@ -22,3 +22,11 @@ resource "aws_vpc" "vpc-custom" {
     Stack = "production"
   }
 }
+
+resource "aws_internet_gateway" "internetGatway-vpc-custom" {
+  vpc_id = aws_vpc.vpc-custom.id
+  tags = {
+    Name = "internetGatway-vpc-custom"
+    Stack = "production"      
+  }
+}
