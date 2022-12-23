@@ -99,4 +99,8 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
     }
 }
 
+  resource "aws_route_table_association" "routeTableAssociation-app-subnet-public-vpc-custom-with-routeTable-vpc-custom" {
+    subnet_id = aws_subnet.app-subnet-public-vpc-custom.id
+    route_table_id = aws_route_table.routeTable-vpc-custom.id
+  }
 
