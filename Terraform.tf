@@ -59,11 +59,11 @@ resource "aws_route_table" "routeTable-vpc-custom" {
   }
 }
 
-resource "aws_subnet" "DB-subnet-private-vpc-custom" {
+resource "aws_subnet" "db-subnet-private-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   cidr_block = "10.0.0.0/24" 
   tags = {
-    Name = "subnet-private-vpc-custom"
+    Name = "db-subnet-private-vpc-custom"
     Stack="production"
   }
 }
