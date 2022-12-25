@@ -189,3 +189,41 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
 output "server-publicIP-app-subnet-public-vpc-custom" {
   value = aws_eip.elasticIP-app-subnet-public-vpc-custom.public_ip  
 }
+
+####################################################################################################
+# Provision an EC2 instance as a web server in public subnet: app-subnet-public-vpc-custom
+# this EC2 instance is associated with following AWS resourcess:
+#   
+#   Created in VPC: vpc-custom
+#   Conneted to internet: internetGatway-vpc-custom
+#   Created in subnet: app-subnet-public-vpc-custom
+#   Associated route table: routeTable-vpc-custom
+#   Associated security group: web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom
+#   Associated network interface: networkInterface-app-subnet-public-vpc-custom
+#   Associated elastic IP: elasticIP-app-subnet-public-vpc-custom
+#   Cross stack resfrence through using the Elastic IP: server-publicIP-app-subnet-public-vpc-custom 
+####################################################################################################
+
+resource "aws_instance" "ec2-webServer-app-subnet-public-vpc-custom" {
+  instance_type = "t2.micro"
+  ami = "ami-09d3b3274b6c5d4aa" # Amazon Linux2 AMI
+  # key_name = "main-key"
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.networkInterface-app-subnet-public-vpc-custom.id
+  }
+
+  	# user_data = file("${path.module}/user_data.sh") # Connect to EC2 instance with SSH or instance connect => $ systemctl status apache2
+    user_data = <<-EF
+                #! /bin/bash
+                sudo apt update -y
+                sudo apt install apache2 -y
+                sudo systemctl start apache2
+                sudo bash -c echo '<h1>Deployed via Terraform</h1> > /var/www/html/index.html'
+                EF
+    
+  tags = {
+    Name = "ec2Instance-webServer-app-subnet-public-vpc-custom"
+    Stack = "production"
+  }
+}
