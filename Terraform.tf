@@ -148,3 +148,14 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
     Stack = "production"      
   }
 }
+
+resource "aws_network_interface" "networkInterface-app-subnet-public-vpc-custom" {
+  subnet_id       = aws_subnet.app-subnet-public-vpc-custom.id
+  private_ips     = ["10.0.1.50"] # cidr_block = "10.0.1.0/24"
+  security_groups = [web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom.id]
+
+  # attachment {
+  #   instance     = aws_instance.test.id
+  #   device_index = 1
+  # }
+}
