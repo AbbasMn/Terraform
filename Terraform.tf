@@ -1,4 +1,5 @@
 terraform {
+  # Declares clude providers
   required_providers {
     aws = {  # all resource declaration should start as : aws_
       source  = "hashicorp/aws"
@@ -10,11 +11,15 @@ terraform {
     # }
   }
 }
+
+# Declare AWS region & API programming credentilas (Access key)
 provider "aws" {
   region     = "us-east-1"
   access_key = "AKIAUQSOWV2UJMW4NVXR"
   secret_key = "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"
 }
+
+# Declare a custom VPC
 resource "aws_vpc" "vpc-custom" {
   cidr_block = "10.0.0.0/16"
   tags = {
@@ -23,6 +28,7 @@ resource "aws_vpc" "vpc-custom" {
   }
 }
 
+# Declare an internet gateway(igw) for custom VPC
 resource "aws_internet_gateway" "internetGatway-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   tags = {
@@ -31,6 +37,7 @@ resource "aws_internet_gateway" "internetGatway-vpc-custom" {
   }
 }
 
+# Declare a custom route table
 resource "aws_route_table" "routeTable-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   route  {
@@ -59,6 +66,7 @@ resource "aws_route_table" "routeTable-vpc-custom" {
   }
 }
 
+# Declare a private subnet in custom VPC as a DB private subnet
 resource "aws_subnet" "db-subnet-private-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   cidr_block = "10.0.0.0/24" 
@@ -68,6 +76,7 @@ resource "aws_subnet" "db-subnet-private-vpc-custom" {
   }
 }
 
+# Declare an application public subnet
 resource "aws_subnet" "app-subnet-public-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   cidr_block = "10.0.1.0/24"
@@ -79,6 +88,8 @@ resource "aws_subnet" "app-subnet-public-vpc-custom" {
     }
 }
 
+# Invoke variabls file (terraform.tfvars) for fetching subnets cidr for following public subnets: test-application & dev-application 
+# Declare a test-application public subnet
 resource "aws_subnet" "test-app-subnet-public-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   cidr_block = var.subnets_cidr[0].cidr_block
@@ -89,6 +100,7 @@ resource "aws_subnet" "test-app-subnet-public-vpc-custom" {
     }
 }
 
+# Declare a dev-application public subnet
 resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   cidr_block = var.subnets_cidr[1].cidr_block
@@ -98,13 +110,15 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
       Stack = "development"      
     }
 }
+ 
+# Associate subnet:app-subnet-public-vpc-custom with custom VPC route table
+resource "aws_route_table_association" "routeTableAssociation-app-subnet-public-vpc-custom-with-routeTable-vpc-custom" {
+  subnet_id = aws_subnet.app-subnet-public-vpc-custom.id
+  route_table_id = aws_route_table.routeTable-vpc-custom.id
+}
 
-  resource "aws_route_table_association" "routeTableAssociation-app-subnet-public-vpc-custom-with-routeTable-vpc-custom" {
-    subnet_id = aws_subnet.app-subnet-public-vpc-custom.id
-    route_table_id = aws_route_table.routeTable-vpc-custom.id
-  }
-
- resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom" {
+# Add a security group (Web & SSH traffic allowed) to pulic appplication subnet
+resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom" {
   name        = "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom"
   description = "Allow web & SSH inbound traffic"
   vpc_id      = aws_vpc.vpc-custom.id
@@ -149,6 +163,7 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
   }
 }
 
+# Attach a network interface to the public subnet: app-subnet-public-vpc-custom; then set an private IP for that.
 resource "aws_network_interface" "networkInterface-app-subnet-public-vpc-custom" {
   subnet_id       = aws_subnet.app-subnet-public-vpc-custom.id
   private_ips     = ["10.0.1.50"] # cidr_block = "10.0.1.0/24"
