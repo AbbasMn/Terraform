@@ -184,3 +184,8 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
     aws_internet_gateway.internetGatway-vpc-custom
   ]
 }
+
+# Set the elastic IP of app-subnet-public-vpc-custom => as output for cross stack refrencing 
+output "server-publicIP-app-subnet-public-vpc-custom" {
+  value = aws_eip.elasticIP-app-subnet-public-vpc-custom.public_ip  
+}
