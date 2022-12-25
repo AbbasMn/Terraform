@@ -185,7 +185,7 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
   ]
 }
 
-# Set the elastic IP of app-subnet-public-vpc-custom => as output for cross stack refrencing 
+# Set the elastic IP of app-subnet-public-vpc-custom => as output for cross stack referencing 
 output "server-publicIP-app-subnet-public-vpc-custom" {
   value = aws_eip.elasticIP-app-subnet-public-vpc-custom.public_ip  
 }
@@ -226,4 +226,9 @@ resource "aws_instance" "ec2-webServer-app-subnet-public-vpc-custom" {
     Name = "ec2Instance-webServer-app-subnet-public-vpc-custom"
     Stack = "production"
   }
+}
+
+# Set the ec2-webServer-app-subnet-public-vpc-custom as output for cross stack referencing
+output "server-webServer-privateIP-app-subnet-public-vpc-custom" {
+  value = aws_instance.ec2-webServer-app-subnet-public-vpc-custom.private_ip
 }
