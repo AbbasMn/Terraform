@@ -39,6 +39,7 @@ resource "aws_vpc" "vpc-custom" {
   tags = {
     Name = "vpc-custom"
     Stack = "production"
+    Project="AwsTerraform"
   }
 }
 
@@ -47,7 +48,8 @@ resource "aws_internet_gateway" "internetGatway-vpc-custom" {
   vpc_id = aws_vpc.vpc-custom.id
   tags = {
     Name = "internetGatway-vpc-custom"
-    Stack = "production"      
+    Stack = "production" 
+    Project="AwsTerraform"    
   }
 }
 
@@ -76,7 +78,8 @@ resource "aws_route_table" "routeTable-vpc-custom" {
   } 
   tags = {
     Name = "routeTable-vpc-custom"
-    Stack = "production"      
+    Stack = "production"   
+    Project="AwsTerraform"   
   }
 }
 
@@ -87,6 +90,7 @@ resource "aws_subnet" "db-subnet-private-vpc-custom" {
   tags = {
     Name = "db-subnet-private-vpc-custom"
     Stack="production"
+    Project="AwsTerraform"
   }
 }
 
@@ -98,7 +102,8 @@ resource "aws_subnet" "app-subnet-public-vpc-custom" {
   availability_zone = "us-east-1a" # if don't hard coded AWS will assign a random AZ
   tags = {
       Name = "app-subnet-public-vpc-custom"
-      Stack = "production"      
+      Stack = "production" 
+      Project="AwsTerraform"     
     }
 }
 
@@ -110,7 +115,9 @@ resource "aws_subnet" "test-app-subnet-public-vpc-custom" {
   availability_zone = "us-east-1a"
   tags = {
       Name = var.subnets_cidr[0].tag_name
-      Stack = "test"      
+      Stack = "production" 
+      SubStack= "test"
+      Project="AwsTerraform"     
     }
 }
 
@@ -121,7 +128,9 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
   availability_zone = "us-east-1a"
   tags = {
       Name = var.subnets_cidr[1].tag_name
-      Stack = "development"      
+      Stack = "production" 
+      SubStack= "development"
+      Project="AwsTerraform"      
     }
 }
  
@@ -173,7 +182,8 @@ resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-
   }
   tags = {
     Name = "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom"
-    Stack = "production"      
+    Stack = "production" 
+    Project="AwsTerraform"        
   }
 }
 
@@ -190,6 +200,7 @@ resource "aws_network_interface" "networkInterface-app-subnet-public-vpc-custom"
   tags = {
     Name = "networkInterface-app-subnet-public-vpc-custom"
     Stack = "production"
+    Project="AwsTerraform"   
   }
 }
 
@@ -205,6 +216,7 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
   tags = {
     Name = "elasticIP-app-subnet-public-vpc-custom"
     Stack = "production"
+    Project="AwsTerraform"   
   }
 }
 
@@ -248,6 +260,7 @@ resource "aws_instance" "ec2-webServer-app-subnet-public-vpc-custom" {
   tags = {
     Name = "ec2Instance-webServer-app-subnet-public-vpc-custom"
     Stack = "production"
+    Project="AwsTerraform"   
   }
 }
 
