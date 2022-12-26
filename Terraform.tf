@@ -3,8 +3,10 @@
 # infrastructure safely and efficiently. This includes low-level components like compute 
 # instances, storage, and networking; and high-level components like DNS entries and SaaS features.
 
+
+# Terraform Setting
 terraform {
-  # Provision clude providers
+  # Provision cloud providers
   required_providers {
     aws = {  # all resource declaration should start as : aws_
       source  = "hashicorp/aws"
