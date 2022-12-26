@@ -19,6 +19,13 @@ terraform {
   }
 }
 
+# Variable declaration Block 
+variable "subnets_cidr" {  # will load from terraform.tfvars file
+  description = "description"
+  # default = 
+  # type = 
+}
+
 # Provision AWS region & API programming credentilas (Access key)
 provider "aws" {
   region     = "us-east-1"
@@ -174,12 +181,16 @@ resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-
 resource "aws_network_interface" "networkInterface-app-subnet-public-vpc-custom" {
   subnet_id       = aws_subnet.app-subnet-public-vpc-custom.id
   private_ips     = ["10.0.1.50"] # cidr_block = "10.0.1.0/24"
-  security_groups = [web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom.id]
+  security_groups = [aws_security_group.web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom.id]
 
   # attachment {
   #   instance     = aws_instance.test.id
-  #   device_index = 1
-  # }
+  #   d
+  
+  tags = {
+    Name = "networkInterface-app-subnet-public-vpc-custom"
+    Stack = "production"
+  }
 }
 
 # Attach an elastic IP to the public subnet: app-subnet-public-vpc-custom => set the network interface 
@@ -190,6 +201,11 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
   depends_on = [
     aws_internet_gateway.internetGatway-vpc-custom
   ]
+
+  tags = {
+    Name = "elasticIP-app-subnet-public-vpc-custom"
+    Stack = "production"
+  }
 }
 
 # Set the elastic IP of app-subnet-public-vpc-custom => as output for cross stack referencing 
