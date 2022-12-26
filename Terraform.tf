@@ -37,9 +37,13 @@ provider "aws" {
 resource "aws_vpc" "vpc-custom" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "vpc-custom"
-    Stack = "production"
-    Project="AwsTerraform"
+    Name    = "vpc-custom"
+    Stack   = "production"
+    Project ="AwsTerraform"
+    Region  = "us-east-1"
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -49,7 +53,11 @@ resource "aws_internet_gateway" "internetGatway-vpc-custom" {
   tags = {
     Name = "internetGatway-vpc-custom"
     Stack = "production" 
-    Project="AwsTerraform"    
+    Project="AwsTerraform"   
+    Region  = "us-east-1" 
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -79,7 +87,11 @@ resource "aws_route_table" "routeTable-vpc-custom" {
   tags = {
     Name = "routeTable-vpc-custom"
     Stack = "production"   
-    Project="AwsTerraform"   
+    Project="AwsTerraform" 
+    Region  = "us-east-1"
+    AavailabilityZones ="N/A"   
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -91,6 +103,10 @@ resource "aws_subnet" "db-subnet-private-vpc-custom" {
     Name = "db-subnet-private-vpc-custom"
     Stack="production"
     Project="AwsTerraform"
+    Region  = "us-east-1"  
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -101,10 +117,14 @@ resource "aws_subnet" "app-subnet-public-vpc-custom" {
   # cidr_block = var.app-subnet-public-vpc-custom # => will ask you (prompt) to enter the valye for this variable whenever you apply
   availability_zone = "us-east-1a" # if don't hard coded AWS will assign a random AZ
   tags = {
-      Name = "app-subnet-public-vpc-custom"
-      Stack = "production" 
-      Project="AwsTerraform"     
-    }
+    Name = "app-subnet-public-vpc-custom"
+    Stack = "production" 
+    Project="AwsTerraform"  
+    Region  = "us-east-1"   
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"  
+  }
 }
 
 # Invoke variabls file (terraform.tfvars) for fetching subnets cidr for following public subnets: test-application & dev-application 
@@ -114,11 +134,15 @@ resource "aws_subnet" "test-app-subnet-public-vpc-custom" {
   cidr_block = var.subnets_cidr[0].cidr_block
   availability_zone = "us-east-1a"
   tags = {
-      Name = var.subnets_cidr[0].tag_name
-      Stack = "production" 
-      SubStack= "test"
-      Project="AwsTerraform"     
-    }
+    Name = var.subnets_cidr[0].tag_name
+    Stack = "production" 
+    SubStack= "test"
+    Project="AwsTerraform" 
+    Region  = "us-east-1"   
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"   
+  }
 }
 
 # Provision a dev-application public subnet
@@ -127,11 +151,15 @@ resource "aws_subnet" "dev-app-subnet-public-vpc-custom" {
   cidr_block = var.subnets_cidr[1].cidr_block
   availability_zone = "us-east-1a"
   tags = {
-      Name = var.subnets_cidr[1].tag_name
-      Stack = "production" 
-      SubStack= "development"
-      Project="AwsTerraform"      
-    }
+    Name = var.subnets_cidr[1].tag_name
+    Stack = "production" 
+    SubStack= "development"
+    Project="AwsTerraform"
+    Region  = "us-east-1"    
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"    
+  }
 }
  
 # Associate subnet:app-subnet-public-vpc-custom with custom VPC route table
@@ -183,7 +211,11 @@ resource "aws_security_group" "web-ssh-traffic-allowed-securityGroup-app-subnet-
   tags = {
     Name = "web-ssh-traffic-allowed-securityGroup-app-subnet-public-vpc-custom"
     Stack = "production" 
-    Project="AwsTerraform"        
+    Project="AwsTerraform" 
+    Region  = "us-east-1" 
+    AavailabilityZones ="N/A"    
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"     
   }
 }
 
@@ -200,7 +232,11 @@ resource "aws_network_interface" "networkInterface-app-subnet-public-vpc-custom"
   tags = {
     Name = "networkInterface-app-subnet-public-vpc-custom"
     Stack = "production"
-    Project="AwsTerraform"   
+    Project="AwsTerraform" 
+    Region  = "us-east-1"   
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -217,6 +253,10 @@ resource "aws_eip" "elasticIP-app-subnet-public-vpc-custom" {
     Name = "elasticIP-app-subnet-public-vpc-custom"
     Stack = "production"
     Project="AwsTerraform"   
+    Region  = "us-east-1" 
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
@@ -261,6 +301,10 @@ resource "aws_instance" "ec2-webServer-app-subnet-public-vpc-custom" {
     Name = "ec2Instance-webServer-app-subnet-public-vpc-custom"
     Stack = "production"
     Project="AwsTerraform"   
+    Region  = "us-east-1" 
+    AavailabilityZones ="N/A" 
+    Organization ="myOrg"
+    OrganizationUnit ="myOrgUnit"
   }
 }
 
