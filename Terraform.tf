@@ -29,8 +29,8 @@ variable "subnets_cidr" {  # will load from terraform.tfvars file
 # Provision AWS region & API programming credentilas (Access key)
 provider "aws" {
   region     = "us-east-1"
-  access_key = "accessKey1"
-  secret_key = "secretkey1"
+  access_key = "accessKey2"
+  secret_key = "secretkey2"
 }
 
 # Provision a custom VPC
